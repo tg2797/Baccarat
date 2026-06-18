@@ -91,6 +91,12 @@
   .movebtns { display:flex; gap:7px; }
   .movebtn { width:38px; height:36px; border:none; border-radius:9px; background:#0E0E0F; color:#E8B765; font-size:16px; line-height:1; }
   .movebtn:disabled { color:#48484A; }
+  /* business-day date selector */
+  .daterow { display:flex; align-items:center; justify-content:space-between; background:#1C1C1E; border-radius:11px; padding:12px 14px; margin:0 2px 8px; }
+  .daterow .dlbl { font-size:15px; color:#EBEBF5; font-weight:500; }
+  .daterow input[type=date], .fin input[type=date] { background:transparent; border:none; color:#E8B765; -webkit-text-fill-color:#E8B765; font-size:16px; font-weight:600; font-variant-numeric:tabular-nums; }
+  .daterow input[type=date] { text-align:right; min-width:0; }
+  .fin input[type=date] { flex:1; }
 
   /* bottom summary */
   .summary {
@@ -237,6 +243,7 @@
 <div class="page active" id="page-calc">
   <div class="largetitle" id="ltCalc">計算</div>
   <div class="listctl" id="calcCtl"><div class="searchbar"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M8.5 2a6.5 6.5 0 0 1 5.07 10.56l3.94 3.93a1 1 0 0 1-1.42 1.42l-3.93-3.94A6.5 6.5 0 1 1 8.5 2zm0 2a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9z"/></svg><input id="calcSearch" type="text" placeholder="従業員を検索" autocomplete="off"></div></div>
+  <div class="daterow" id="calcDateRow"><span class="dlbl">営業日</span><input id="calcDate" type="date"></div>
   <div id="calcList"></div>
 </div>
 <div class="page" id="page-emp">
@@ -341,8 +348,12 @@
       }
     } catch(e){}
     if(state.drinks.length===0) state.drinks = DEFAULT_DRINKS.map(function(d){ var c=Object.assign({},d); c.id=uid(); return c; });
+    state.workDate = todayYMD();
     migrateHistory();
   }
+  function pad2(x){ return (x<10?"0":"")+x; }
+  function todayYMD(){ var n=new Date(); return n.getFullYear()+"-"+pad2(n.getMonth()+1)+"-"+pad2(n.getDate()); }
+  function workDateObj(){ var s=state.workDate; if(s && /^\d{4}-\d{2}-\d{2}$/.test(s)){ var p=s.split("-"); return new Date(+p[0], +p[1]-1, +p[2], 12, 0, 0); } return new Date(); }
   /* convert legacy day-records ({date,items:[...]}) into per-employee records */
   function migrateHistory(){
     var out=[], changed=false;
@@ -404,8 +415,9 @@
   function renderCalc(){
     var list=el("calcList");
     var q=(el("calcSearch").value||"").trim().toLowerCase();
-    if(state.employees.length===0){ el("calcCtl").style.display="none"; list.innerHTML='<div class="empty"><div class="big">🍸</div><div class="t">従業員がいません</div><div class="d">「従業員」タブから<br>名前と時給を登録してください</div></div>'; el("summary").classList.remove("show"); return; }
+    if(state.employees.length===0){ el("calcCtl").style.display="none"; el("calcDateRow").style.display="none"; list.innerHTML='<div class="empty"><div class="big">🍸</div><div class="t">従業員がいません</div><div class="d">「従業員」タブから<br>名前と時給を登録してください</div></div>'; el("summary").classList.remove("show"); return; }
     el("calcCtl").style.display="flex";
+    el("calcDateRow").style.display="flex"; el("calcDate").value=state.workDate||"";
     var emps=state.employees.filter(function(e){ return !q || e.name.toLowerCase().indexOf(q)!==-1; });
     if(emps.length===0){ list.innerHTML=noResult(); }
     else {
@@ -711,8 +723,8 @@
     var emp=empById(empId); var t=state.today[empId]||{}; var h=num(t.hours); var c=computeEmp(empId);
     var lines=[];
     state.drinks.forEach(function(d){ var r=drinkBack(d, t.drinks?t.drinks[d.id]:null); if(r.back>0) lines.push({name:d.name,label:r.label,amt:r.back}); });
-    var now=new Date();
-    return { id:uid(), ts:now.getTime(), date:dateStr(now), empId:empId, name:emp.name, wage:emp.wage, hours:h, wagePay:c.wagePay, back:c.back, total:c.total, lines:lines };
+    var d=workDateObj();
+    return { id:uid(), ts:d.getTime(), date:dateStr(d), empId:empId, name:emp.name, wage:emp.wage, hours:h, wagePay:c.wagePay, back:c.back, total:c.total, lines:lines };
   }
   function upsertRecord(rec){
     for(var i=0;i<state.history.length;i++){ var x=state.history[i]; if(x.date===rec.date && x.empId===rec.empId){ rec.id=x.id; state.history[i]=rec; return false; } }
@@ -765,7 +777,8 @@
     function refresh(){ var c=computeEmp(empId); el("cdTotal").textContent=yen(c.total); el("cdBreak").textContent="時給 "+yen(c.wagePay)+"　＋　バック "+yen(c.back); save(); }
 
     function buildInput(){
-      var body='<div class="field-label first">勤務時間</div><div class="fin"><input id="cdHours" class="tnum" type="text" inputmode="decimal" placeholder="0" value="'+(t.hours!=null?t.hours:'')+'"><span class="suf">時間</span></div>';
+      var body='<div class="field-label first">営業日</div><div class="fin"><input id="cdDate" type="date" value="'+(state.workDate||'')+'"></div>'
+        +'<div class="field-label">勤務時間</div><div class="fin"><input id="cdHours" class="tnum" type="text" inputmode="decimal" placeholder="0" value="'+(t.hours!=null?t.hours:'')+'"><span class="suf">時間</span></div>';
       groupOrder().forEach(function(g){
         body+='<div class="field-label">'+escapeHtml(g)+'</div><div class="group">';
         state.drinks.filter(function(d){return (d.group||"その他")===g;}).forEach(function(d){
@@ -783,6 +796,7 @@
         body+='</div>';
       });
       el("cdScroll").innerHTML=body;
+      el("cdDate").addEventListener("change", function(){ if(el("cdDate").value){ state.workDate=el("cdDate").value; save(); } });
       el("cdHours").addEventListener("input", function(){ t.hours=el("cdHours").value; refresh(); });
       el("cdScroll").querySelectorAll(".cdAmt").forEach(function(inp){ commaInput(inp); inp.addEventListener("input", function(){ t.drinks[inp.getAttribute("data-did")]=inp.value; refresh(); }); });
       el("cdScroll").querySelectorAll(".cdPlus").forEach(function(b){ b.addEventListener("click", function(){ var id=b.getAttribute("data-did"); var c=Math.round(num(t.drinks[id]))+1; t.drinks[id]=c; var n=el("stnum-"+id); n.value=c; n.classList.remove("zero"); refresh(); }); });
@@ -848,6 +862,7 @@
     el("addDrinkBtn").addEventListener("click", function(){ openDrinkEdit(null); });
 
     el("calcSearch").addEventListener("input", renderCalc);
+    el("calcDate").addEventListener("change", function(){ if(el("calcDate").value){ state.workDate=el("calcDate").value; save(); } });
     el("empSearch").addEventListener("input", renderEmp);
     el("drinkSearch").addEventListener("input", renderDrinks);
     el("empSort").addEventListener("click", function(){ empReorder=!empReorder; this.classList.toggle("on",empReorder); this.textContent=empReorder?"完了":"並び替え"; if(empReorder) el("empSearch").value=""; renderEmp(); });
@@ -858,7 +873,7 @@
     el("btnRestore").addEventListener("click", function(){ el("restoreFile").click(); });
     el("restoreFile").addEventListener("change", function(){ if(this.files && this.files[0]) importJSON(this.files[0]); this.value=""; });
 
-    el("resetBtn").addEventListener("click", function(){ if(!confirm("入力した勤務時間・杯数をクリアしますか？")) return; state.today={}; save(); renderCalc(); toast("クリアしました"); });
+    el("resetBtn").addEventListener("click", function(){ if(!confirm("入力した勤務時間・杯数をクリアしますか？")) return; state.today={}; state.workDate=todayYMD(); save(); renderCalc(); toast("クリアしました"); });
     el("saveBtn").addEventListener("click", function(){
       var n=0;
       state.employees.forEach(function(e){ if(computeEmp(e.id).total>0){ upsertRecord(buildRecord(e.id)); n++; } });

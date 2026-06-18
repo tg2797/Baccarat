@@ -129,6 +129,8 @@
     transition:transform .34s cubic-bezier(.32,.72,0,1); max-height:94vh; display:flex; flex-direction:column;
   }
   .sheet.show { transform:translateY(0); }
+  .sheet.full { top:0; max-height:none; height:100dvh; height:100vh; border-radius:0; }
+  .sheet.full .sheet-nav { padding-top:calc(env(safe-area-inset-top) + 10px); }
   .grabber { width:36px; height:5px; border-radius:3px; background:#5A5A5E; margin:8px auto 0; flex:none; }
   .sheet-nav { flex:none; display:flex; align-items:center; justify-content:space-between; padding:12px 16px 10px; min-height:48px; }
   .sheet-nav .sn-side { min-width:64px; }
@@ -164,6 +166,8 @@
   .stepper .stnum::before { content:""; position:absolute; left:0; top:8px; bottom:8px; width:0.5px; background:#3A3A3C; }
   .stepper .stnum::after { content:""; position:absolute; right:0; top:8px; bottom:8px; width:0.5px; background:#3A3A3C; }
   .stepper .stnum.zero { color:#5A5A5E; }
+  .stepper input.stcount { width:54px; height:38px; background:transparent; border:none; border-left:0.5px solid #3A3A3C; border-right:0.5px solid #3A3A3C; text-align:center; font-size:17px; font-weight:600; color:#FFFFFF; font-variant-numeric:tabular-nums; }
+  .stepper input.stcount.zero { color:#5A5A5E; }
   .amtbox { display:flex; align-items:center; background:#0E0E0F; border-radius:11px; padding:9px 13px; }
   .amtbox .pre { color:rgba(235,235,245,0.5); font-size:15px; margin-right:3px; }
   .amtbox input { width:92px; background:transparent; border:none; color:#FFFFFF; font-size:16px; font-weight:600; text-align:right; font-variant-numeric:tabular-nums; }
@@ -190,6 +194,35 @@
   .msum-emp .n { color:#EBEBF5; }
   .msum-emp .a { color:#FFFFFF; font-variant-numeric:tabular-nums; font-weight:600; }
   .msum-sub { font-size:12px; color:rgba(235,235,245,0.5); }
+  /* tappable employee row inside a day card */
+  .hrow { position:relative; display:flex; align-items:center; justify-content:space-between; padding:13px 2px; border-top:0.5px solid #38383A; transition:background .12s; border-radius:8px; }
+  .hrow:active { background:#2A2A2C; }
+  .hrow .hl .nm2 { font-size:16px; font-weight:500; }
+  .hrow .hl .sub2 { font-size:12px; color:rgba(235,235,245,0.5); margin-top:2px; font-variant-numeric:tabular-nums; }
+  .hrow .hr { display:flex; align-items:center; gap:6px; }
+  .hrow .hr .amt2 { font-size:17px; font-weight:700; font-variant-numeric:tabular-nums; }
+  .hrow .hr .chev { color:#48484A; font-size:17px; font-weight:600; }
+
+  /* pay slip (給料明細) */
+  .payslip { background:linear-gradient(180deg,#15150F,#0C0C0C); border:1px solid #2A2A22; border-radius:18px; padding:22px 20px 24px; margin:8px 0 18px; }
+  .ps-brand { text-align:center; font-size:15px; letter-spacing:2px; color:#7BE08A; font-weight:600; margin-bottom:2px; }
+  .ps-title { text-align:center; font-size:13px; letter-spacing:6px; color:rgba(235,235,245,0.55); margin-bottom:14px; }
+  .ps-meta { display:flex; align-items:baseline; justify-content:space-between; padding-bottom:14px; border-bottom:0.5px solid #38383A; }
+  .ps-name { font-size:23px; font-weight:700; }
+  .ps-name .sama { font-size:14px; font-weight:500; color:rgba(235,235,245,0.6); margin-left:3px; }
+  .ps-date { font-size:13px; color:rgba(235,235,245,0.6); font-variant-numeric:tabular-nums; text-align:right; }
+  .ps-rows { padding:6px 0 4px; }
+  .ps-row { display:flex; align-items:baseline; justify-content:space-between; padding:11px 0; border-bottom:0.5px solid rgba(255,255,255,0.06); }
+  .ps-row .pl { min-width:0; padding-right:12px; }
+  .ps-row .pl .pn { font-size:15px; font-weight:500; }
+  .ps-row .pl .pd { font-size:12px; color:rgba(235,235,245,0.5); margin-top:2px; font-variant-numeric:tabular-nums; }
+  .ps-row .pa { font-size:16px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .ps-total { display:flex; align-items:baseline; justify-content:space-between; margin-top:16px; padding-top:14px; border-top:1.5px solid #4A4A3A; }
+  .ps-total .tl { font-size:16px; font-weight:600; color:rgba(235,235,245,0.85); }
+  .ps-total .tv { font-size:32px; font-weight:800; font-variant-numeric:tabular-nums; }
+  .ps-note { text-align:center; font-size:12px; color:rgba(235,235,245,0.4); margin-top:14px; }
+  .ps-save { display:block; width:100%; border:none; border-radius:14px; padding:16px; margin-top:6px; font-size:17px; font-weight:700; background:linear-gradient(135deg,#8FE8A0,#3FB85A); color:#06210C; }
+  .ps-save.saved { background:#2C2C2E; color:#7BE08A; }
 
   .toast { position:fixed; left:50%; bottom:calc(128px + env(safe-area-inset-bottom)); transform:translateX(-50%) translateY(10px); z-index:130; background:rgba(58,58,60,0.96); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); color:#FFFFFF; padding:13px 24px; border-radius:26px; font-size:14px; font-weight:500; opacity:0; pointer-events:none; transition:all .25s; max-width:86vw; text-align:center; }
   .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
@@ -308,6 +341,20 @@
       }
     } catch(e){}
     if(state.drinks.length===0) state.drinks = DEFAULT_DRINKS.map(function(d){ var c=Object.assign({},d); c.id=uid(); return c; });
+    migrateHistory();
+  }
+  /* convert legacy day-records ({date,items:[...]}) into per-employee records */
+  function migrateHistory(){
+    var out=[], changed=false;
+    state.history.forEach(function(h){
+      if(h && h.items && !h.empId){
+        changed=true;
+        h.items.forEach(function(it){
+          out.push({ id:uid(), ts:h.ts||Date.now(), date:h.date, empId:it.empId||("legacy_"+it.name), name:it.name, wage:it.wage||0, hours:it.hours||0, wagePay:(it.total||0)-(it.back||0), back:it.back||0, total:it.total||0, lines:it.lines||[] });
+        });
+      } else { out.push(h); }
+    });
+    if(changed) state.history=out;
   }
   function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
 
@@ -478,18 +525,17 @@
     var groups={}, order=[];
     state.history.forEach(function(h){
       var k=monthKey(h);
-      if(!groups[k]){ groups[k]={total:0, days:0, emps:{}, empOrder:[]}; order.push(k); }
-      var grp=groups[k]; grp.total+=h.grandTotal||0; grp.days++;
-      (h.items||[]).forEach(function(it){
-        if(grp.emps[it.name]==null){ grp.emps[it.name]=0; grp.empOrder.push(it.name); }
-        grp.emps[it.name]+=it.total||0;
-      });
+      if(!groups[k]){ groups[k]={total:0, days:{}, dayCount:0, emps:{}, empOrder:[]}; order.push(k); }
+      var grp=groups[k]; grp.total+=h.total||0;
+      if(!grp.days[h.date]){ grp.days[h.date]=1; grp.dayCount++; }
+      if(grp.emps[h.name]==null){ grp.emps[h.name]=0; grp.empOrder.push(h.name); }
+      grp.emps[h.name]+=h.total||0;
     });
     order.sort(function(a,b){ return cmpKey(b)-cmpKey(a); });
     var html='<div class="grouplabel first">集計</div>';
     order.forEach(function(k){
       var g=groups[k];
-      html+='<div class="hcard"><div class="hcard-head"><div><div class="hdate">'+escapeHtml(monthLabel(k))+'</div><div class="msum-sub">'+g.days+'日分</div></div><div class="htotal goldgrad">'+yen(g.total)+'</div></div>';
+      html+='<div class="hcard"><div class="hcard-head"><div><div class="hdate">'+escapeHtml(monthLabel(k))+'</div><div class="msum-sub">'+g.dayCount+'日分</div></div><div class="htotal goldgrad">'+yen(g.total)+'</div></div>';
       g.empOrder.forEach(function(nm){ html+='<div class="msum-emp"><div class="n">'+escapeHtml(nm)+'</div><div class="a tnum">'+yen(g.emps[nm])+'</div></div>'; });
       html+='</div>';
     });
@@ -498,20 +544,29 @@
 
   function renderHist(){
     var list=el("histList");
-    if(state.history.length===0){ list.innerHTML='<div class="empty"><div class="big">📋</div><div class="t">履歴がありません</div><div class="d">計算画面で「履歴に保存」すると<br>ここに残ります</div></div>'; return; }
+    if(state.history.length===0){ list.innerHTML='<div class="empty"><div class="big">📋</div><div class="t">履歴がありません</div><div class="d">計算画面で明細を「保存」すると<br>ここに残ります</div></div>'; return; }
+    var recs=state.history.slice().sort(function(a,b){ return (b.ts||0)-(a.ts||0); });
+    var groups={}, order=[];
+    recs.forEach(function(r){ var k=r.date||"—"; if(!groups[k]){ groups[k]={recs:[], total:0}; order.push(k); } groups[k].recs.push(r); groups[k].total+=r.total||0; });
     var html="";
-    state.history.forEach(function(h){
-      html+='<div class="hcard"><div class="hcard-head"><div class="hdate">'+escapeHtml(h.date)+'</div><div class="htotal goldgrad">'+yen(h.grandTotal)+'</div></div>';
-      h.items.forEach(function(it){ html+='<div class="hitem"><div class="hn">'+escapeHtml(it.name)+'</div><div class="hd">'+(it.hours>0?it.hours+'時間 ':'')+'バック'+yen(it.back)+'</div><div class="ha">'+yen(it.total)+'</div></div>'; });
-      html+='<div class="hcard-actions"><button data-copy="'+h.id+'">コピー</button><button class="del" data-hid="'+h.id+'">削除</button></div></div>';
+    order.forEach(function(k){
+      var g=groups[k];
+      html+='<div class="hcard"><div class="hcard-head"><div class="hdate">'+escapeHtml(k)+'</div><div class="htotal goldgrad">'+yen(g.total)+'</div></div>';
+      g.recs.forEach(function(r){
+        var sub=(r.hours>0?r.hours+'時間':'')+((r.hours>0&&r.back>0)?' / ':'')+(r.back>0?'バック'+yen(r.back):'');
+        html+='<div class="hrow tap" data-rec="'+r.id+'"><div class="hl"><div class="nm2">'+escapeHtml(r.name)+'</div>'+(sub?'<div class="sub2">'+sub+'</div>':'')+'</div>'
+          +'<div class="hr"><div class="amt2 goldgrad">'+yen(r.total)+'</div><div class="chev">›</div></div></div>';
+      });
+      html+='</div>';
     });
     list.innerHTML=html;
-    list.querySelectorAll("button[data-hid]").forEach(function(b){ b.addEventListener("click",function(){ var id=b.getAttribute("data-hid"); state.history=state.history.filter(function(x){return x.id!==id;}); save(); renderHistSummary(); renderHist(); }); });
-    list.querySelectorAll("button[data-copy]").forEach(function(b){ b.addEventListener("click",function(){ var id=b.getAttribute("data-copy"); var h=null; state.history.forEach(function(x){ if(x.id===id) h=x; }); if(h) copyText(histText(h)); }); });
+    list.querySelectorAll(".hrow").forEach(function(r){ r.addEventListener("click", function(){ openHistDetail(r.getAttribute("data-rec")); }); });
   }
-  function histText(h){
-    var lines=[h.date+"　合計 "+yen(h.grandTotal)];
-    (h.items||[]).forEach(function(it){ lines.push("・"+it.name+" "+(it.hours>0?it.hours+"時間 ":"")+"バック"+yen(it.back)+" → "+yen(it.total)); });
+  function histText(r){
+    var lines=["【給料明細】"+(r.name?(" "+r.name+" 様"):""), fullDate(r), ""];
+    if(r.hours>0) lines.push("時給 "+r.hours+"時間 × "+yen(r.wage)+" = "+yen(r.wagePay));
+    (r.lines||[]).forEach(function(l){ lines.push(l.name+" "+(l.label||"")+" = "+yen(l.amt)); });
+    lines.push("", "合計 "+yen(r.total));
     return lines.join("\n");
   }
 
@@ -541,8 +596,8 @@
   function csvCell(v){ v=String(v==null?"":v); return /[",\n\r]/.test(v)? '"'+v.replace(/"/g,'""')+'"' : v; }
   function exportCSV(){
     if(state.history.length===0){ toast("履歴がありません"); return; }
-    var rows=[["日付","従業員","勤務時間","バック","合計"]];
-    state.history.forEach(function(h){ (h.items||[]).forEach(function(it){ rows.push([h.date, it.name, (it.hours||0), Math.round(it.back||0), Math.round(it.total||0)]); }); });
+    var rows=[["日付","従業員","勤務時間","時給分","バック","合計"]];
+    state.history.slice().sort(function(a,b){return (a.ts||0)-(b.ts||0);}).forEach(function(r){ rows.push([r.date, r.name, (r.hours||0), Math.round(r.wagePay||0), Math.round(r.back||0), Math.round(r.total||0)]); });
     var csv=rows.map(function(r){ return r.map(csvCell).join(","); }).join("\r\n");
     if(download("kyuryo_"+ymd()+".csv", "﻿"+csv, "text/csv;charset=utf-8")) toast("CSVを書き出しました"); else copyText(csv);
   }
@@ -560,6 +615,7 @@
       state.drinks = (Array.isArray(d.drinks) && d.drinks.length)? d.drinks : state.drinks;
       state.today = (d.today && typeof d.today==="object")? d.today : {};
       state.history = Array.isArray(d.history)? d.history : [];
+      migrateHistory();
       save(); renderAll(); toast("復元しました");
     };
     r.onerror=function(){ toast("ファイルを読み込めませんでした"); };
@@ -572,7 +628,7 @@
   }
 
   /* sheet core */
-  function openSheet(html){ el("sheet").innerHTML=html; el("scrim").classList.add("show"); el("sheet").classList.add("show"); }
+  function openSheet(html, full){ var s=el("sheet"); s.innerHTML=html; s.classList.toggle("full", !!full); el("scrim").classList.add("show"); s.classList.add("show"); }
   function closeSheet(){ el("scrim").classList.remove("show"); el("sheet").classList.remove("show"); if(document.activeElement) document.activeElement.blur(); }
 
   /* employee edit sheet */
@@ -647,6 +703,50 @@
     return {back:back, label:lbl};
   }
 
+  /* per-employee history records (pay slips) */
+  var WD="日月火水木金土";
+  function dateStr(d){ return (d.getMonth()+1)+"月"+d.getDate()+"日（"+WD.charAt(d.getDay())+"）"; }
+  function fullDate(rec){ if(rec.ts){ var d=new Date(rec.ts); return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日（"+WD.charAt(d.getDay())+"）"; } return rec.date||""; }
+  function buildRecord(empId){
+    var emp=empById(empId); var t=state.today[empId]||{}; var h=num(t.hours); var c=computeEmp(empId);
+    var lines=[];
+    state.drinks.forEach(function(d){ var r=drinkBack(d, t.drinks?t.drinks[d.id]:null); if(r.back>0) lines.push({name:d.name,label:r.label,amt:r.back}); });
+    var now=new Date();
+    return { id:uid(), ts:now.getTime(), date:dateStr(now), empId:empId, name:emp.name, wage:emp.wage, hours:h, wagePay:c.wagePay, back:c.back, total:c.total, lines:lines };
+  }
+  function upsertRecord(rec){
+    for(var i=0;i<state.history.length;i++){ var x=state.history[i]; if(x.date===rec.date && x.empId===rec.empId){ rec.id=x.id; state.history[i]=rec; return false; } }
+    state.history.unshift(rec); return true;
+  }
+  function payslipHTML(rec){
+    var rows="";
+    if(rec.hours>0) rows+='<div class="ps-row"><div class="pl"><div class="pn">時給</div><div class="pd">'+rec.hours+'時間 × '+yen(rec.wage)+'</div></div><div class="pa">'+yen(rec.wagePay)+'</div></div>';
+    (rec.lines||[]).forEach(function(l){ rows+='<div class="ps-row"><div class="pl"><div class="pn">'+escapeHtml(l.name)+'</div><div class="pd">'+escapeHtml(l.label||"")+'</div></div><div class="pa">'+yen(l.amt)+'</div></div>'; });
+    if(!rows) rows='<div class="ps-row"><div class="pl"><div class="pn" style="color:rgba(235,235,245,0.5)">入力がありません</div></div><div class="pa"></div></div>';
+    return '<div class="payslip">'
+      +'<div class="ps-brand">Baccarat</div><div class="ps-title">給 料 明 細</div>'
+      +'<div class="ps-meta"><div class="ps-name">'+escapeHtml(rec.name)+'<span class="sama">様</span></div><div class="ps-date">'+escapeHtml(fullDate(rec))+'</div></div>'
+      +'<div class="ps-rows">'+rows+'</div>'
+      +'<div class="ps-total"><div class="tl">合計支給額</div><div class="tv goldgrad">'+yen(rec.total)+'</div></div>'
+      +'</div>';
+  }
+
+  /* read-only pay slip from history */
+  function openHistDetail(id){
+    var rec=null; for(var i=0;i<state.history.length;i++) if(state.history[i].id===id) rec=state.history[i];
+    if(!rec) return;
+    var html='<div class="grabber"></div>'
+      +'<div class="sheet-nav"><button id="hdClose" class="sn-side sn-left">閉じる</button>'
+      +'<div class="sn-title"><div class="t">給料明細</div></div>'
+      +'<button id="hdCopy" class="sn-side sn-right">コピー</button></div>'
+      +'<div class="sheet-scroll">'+payslipHTML(rec)
+      +'<div class="delrow"><button id="hdDel">この明細を削除</button></div></div>';
+    openSheet(html, true);
+    el("hdClose").addEventListener("click", closeSheet);
+    el("hdCopy").addEventListener("click", function(){ copyText(histText(rec)); });
+    el("hdDel").addEventListener("click", function(){ if(!confirm("この明細を削除しますか？")) return; state.history=state.history.filter(function(x){return x.id!==rec.id;}); save(); closeSheet(); renderHistSummary(); renderHist(); toast("削除しました"); });
+  }
+
   function openCalcDetail(empId){
     var emp=empById(empId);
     if(!state.today[empId]) state.today[empId]={};
@@ -654,14 +754,13 @@
     var t=state.today[empId];
     var mode="input";
 
-    var html='<div class="grabber"></div>'
-      +'<div class="sheet-nav"><div class="sn-side"></div>'
+    var html='<div class="sheet-nav"><button id="cdClose" class="sn-side sn-left">閉じる</button>'
       +'<div class="sn-title"><div class="t">'+escapeHtml(emp.name)+'</div><div class="s">時給 '+yen(emp.wage)+'</div></div>'
-      +'<button id="cdDone" class="sn-side sn-right bold">完了</button></div>'
-      +'<div style="padding:2px 16px 6px"><div class="seg"><button id="mInput" class="on">入力</button><button id="mSum">集計</button></div></div>'
+      +'<div class="sn-side"></div></div>'
+      +'<div style="padding:2px 16px 6px"><div class="seg"><button id="mInput" class="on">入力</button><button id="mSum">集計（明細）</button></div></div>'
       +'<div class="sheet-scroll" id="cdScroll"></div>'
-      +'<div class="sheet-foot"><div class="foot-line"><div class="foot-break" id="cdBreak"></div><div class="foot-total goldgrad" id="cdTotal">¥0</div></div></div>';
-    openSheet(html);
+      +'<div class="sheet-foot" id="cdFoot"><div class="foot-line"><div class="foot-break" id="cdBreak"></div><div class="foot-total goldgrad" id="cdTotal">¥0</div></div></div>';
+    openSheet(html, true);
 
     function refresh(){ var c=computeEmp(empId); el("cdTotal").textContent=yen(c.total); el("cdBreak").textContent="時給 "+yen(c.wagePay)+"　＋　バック "+yen(c.back); save(); }
 
@@ -678,7 +777,7 @@
             var c=Math.round(num(v));
             var note=(d.bonusEvery>0&&d.bonusAmt>0)?'<div class="sub bonus">'+yen(d.value)+' / 杯　'+d.bonusEvery+'杯ごと＋'+yen(d.bonusAmt)+'</div>':'<div class="sub tnum">'+yen(d.value)+' / 杯</div>';
             body+='<div class="cell"><div><div class="nm">'+escapeHtml(d.name)+'</div>'+note+'</div>'
-              +'<div class="cd-right"><div class="stepper"><button class="cdMinus" data-did="'+d.id+'">−</button><div class="stnum '+(c>0?'':'zero')+'" id="stnum-'+d.id+'">'+c+'</div><button class="cdPlus" data-did="'+d.id+'">＋</button></div></div></div>';
+              +'<div class="cd-right"><div class="stepper"><button class="cdMinus" data-did="'+d.id+'">−</button><input class="stcount '+(c>0?'':'zero')+'" id="stnum-'+d.id+'" data-did="'+d.id+'" type="text" inputmode="numeric" value="'+c+'"><button class="cdPlus" data-did="'+d.id+'">＋</button></div></div></div>';
           }
         });
         body+='</div>';
@@ -686,37 +785,42 @@
       el("cdScroll").innerHTML=body;
       el("cdHours").addEventListener("input", function(){ t.hours=el("cdHours").value; refresh(); });
       el("cdScroll").querySelectorAll(".cdAmt").forEach(function(inp){ commaInput(inp); inp.addEventListener("input", function(){ t.drinks[inp.getAttribute("data-did")]=inp.value; refresh(); }); });
-      el("cdScroll").querySelectorAll(".cdPlus").forEach(function(b){ b.addEventListener("click", function(){ var id=b.getAttribute("data-did"); var c=Math.round(num(t.drinks[id]))+1; t.drinks[id]=c; var n=el("stnum-"+id); n.textContent=c; n.classList.remove("zero"); refresh(); }); });
-      el("cdScroll").querySelectorAll(".cdMinus").forEach(function(b){ b.addEventListener("click", function(){ var id=b.getAttribute("data-did"); var c=Math.round(num(t.drinks[id]))-1; if(c<0)c=0; t.drinks[id]=c; var n=el("stnum-"+id); n.textContent=c; n.classList.toggle("zero",c===0); refresh(); }); });
+      el("cdScroll").querySelectorAll(".cdPlus").forEach(function(b){ b.addEventListener("click", function(){ var id=b.getAttribute("data-did"); var c=Math.round(num(t.drinks[id]))+1; t.drinks[id]=c; var n=el("stnum-"+id); n.value=c; n.classList.remove("zero"); refresh(); }); });
+      el("cdScroll").querySelectorAll(".cdMinus").forEach(function(b){ b.addEventListener("click", function(){ var id=b.getAttribute("data-did"); var c=Math.round(num(t.drinks[id]))-1; if(c<0)c=0; t.drinks[id]=c; var n=el("stnum-"+id); n.value=c; n.classList.toggle("zero",c===0); refresh(); }); });
+      el("cdScroll").querySelectorAll(".stcount").forEach(function(inp){
+        inp.addEventListener("input", function(){ var id=inp.getAttribute("data-did"); var c=Math.round(num(inp.value)); if(c<0)c=0; t.drinks[id]=c; inp.classList.toggle("zero",c===0); refresh(); });
+        inp.addEventListener("blur", function(){ var id=inp.getAttribute("data-did"); inp.value=Math.round(num(t.drinks[id])); });
+        inp.addEventListener("focus", function(){ inp.select && inp.select(); });
+      });
     }
 
     function buildSummary(){
-      var c=computeEmp(empId); var h=num(t.hours);
-      var rows="";
-      if(h>0){
-        rows+='<div class="field-label first">給料</div><div class="group">'
-          +'<div class="cell"><div><div class="nm">時給</div><div class="sub tnum">'+h+'時間 × '+yen(emp.wage)+'</div></div><div class="erow-amt tnum">'+yen(c.wagePay)+'</div></div></div>';
-      }
-      var dr="";
-      state.drinks.forEach(function(d){
-        var r=drinkBack(d, t.drinks[d.id]); if(r.back<=0) return;
-        dr+='<div class="cell"><div><div class="nm">'+escapeHtml(d.name)+'</div><div class="sub tnum">'+r.label+'</div></div><div class="erow-amt tnum">'+yen(r.back)+'</div></div>';
+      var rec=buildRecord(empId);
+      var saved=false;
+      for(var i=0;i<state.history.length;i++){ var x=state.history[i]; if(x.date===rec.date && x.empId===empId){ saved=true; break; } }
+      var html=payslipHTML(rec)
+        +'<button class="ps-save'+(saved?' saved':'')+'" id="cdSave">'+(saved?'✓ 保存済み（更新する）':'この明細を履歴に保存')+'</button>'
+        +'<div class="ps-note">スクリーンショットで明細を保存できます</div>';
+      el("cdScroll").innerHTML=html;
+      el("cdSave").addEventListener("click", function(){
+        if(rec.total<=0){ toast("入力がありません"); return; }
+        var isNew=upsertRecord(buildRecord(empId)); save();
+        el("cdSave").classList.add("saved"); el("cdSave").textContent="✓ 保存しました";
+        toast(isNew?"履歴に保存しました":"明細を更新しました");
       });
-      if(dr) rows+='<div class="field-label'+(h>0?'':' first')+'">ドリンクバック</div><div class="group">'+dr+'</div>';
-      if(!rows) rows='<div class="empty"><div class="big">📝</div><div class="t">入力がありません</div><div class="d">「入力」タブで<br>勤務時間や杯数を入れてください</div></div>';
-      el("cdScroll").innerHTML=rows;
     }
 
     function setMode(m){
       mode=m;
       el("mInput").classList.toggle("on",m==="input");
       el("mSum").classList.toggle("on",m==="summary");
+      el("cdFoot").style.display = m==="input" ? "" : "none";
       if(m==="input") buildInput(); else buildSummary();
       el("cdScroll").scrollTop=0;
     }
     el("mInput").addEventListener("click", function(){ setMode("input"); });
     el("mSum").addEventListener("click", function(){ setMode("summary"); });
-    el("cdDone").addEventListener("click", function(){ closeSheet(); renderCalc(); });
+    el("cdClose").addEventListener("click", function(){ closeSheet(); renderCalc(); });
 
     buildInput(); refresh();
   }
@@ -756,15 +860,10 @@
 
     el("resetBtn").addEventListener("click", function(){ if(!confirm("入力した勤務時間・杯数をクリアしますか？")) return; state.today={}; save(); renderCalc(); toast("クリアしました"); });
     el("saveBtn").addEventListener("click", function(){
-      var items=[],g=0;
-      state.employees.forEach(function(e){ var c=computeEmp(e.id); var t=state.today[e.id]||{}; var h=num(t.hours); if(c.total>0){ items.push({name:e.name,hours:h,back:c.back,total:c.total}); g+=c.total; } });
-      if(items.length===0){ toast("入力がありません"); return; }
-      var now=new Date(); var dstr=(now.getMonth()+1)+"月"+now.getDate()+"日（"+"日月火水木金土".charAt(now.getDay())+"）";
-      var existing=null;
-      for(var i=0;i<state.history.length;i++){ if(state.history[i].date===dstr){ existing=state.history[i]; break; } }
-      if(existing){ existing.items=items; existing.grandTotal=g; existing.ts=now.getTime(); }
-      else { state.history.unshift({id:uid(),date:dstr,ts:now.getTime(),items:items,grandTotal:g}); }
-      save(); toast(existing?"本日の履歴を更新しました":"履歴に保存しました");
+      var n=0;
+      state.employees.forEach(function(e){ if(computeEmp(e.id).total>0){ upsertRecord(buildRecord(e.id)); n++; } });
+      if(n===0){ toast("入力がありません"); return; }
+      save(); toast(n+"名の明細を履歴に保存しました");
       switchTab("hist");
     });
 

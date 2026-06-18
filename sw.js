@@ -1,5 +1,5 @@
 /* 給料計算 — service worker (offline app shell) */
-var CACHE = "kyuryo-v1";
+var CACHE = "kyuryo-v2";
 var ASSETS = [
   "./",
   "./index.html",

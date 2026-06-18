@@ -311,6 +311,15 @@
   var empReorder = false, drinkReorder = false;
 
   var DEFAULT_DRINKS = [
+    {name:"キャストドリンク", group:"ドリンク", kind:"fixed", value:200, bonusEvery:11, bonusAmt:500},
+    {name:"ヘルプドリンク", group:"ドリンク", kind:"fixed", value:100},
+    {name:"予約の子ドリンク", group:"ドリンク", kind:"fixed", value:100},
+    {name:"テキーラ", group:"ショット", kind:"fixed", value:500},
+    {name:"コカボム", group:"ショット", kind:"fixed", value:500},
+    {name:"黒霧島", group:"焼酎", kind:"fixed", value:800},
+    {name:"壱岐", group:"焼酎", kind:"fixed", value:800},
+    {name:"白", group:"焼酎", kind:"fixed", value:800},
+    {name:"ウィスキー", group:"その他", kind:"fixed", value:1000},
     {name:"リステル", group:"抜き物", kind:"fixed", value:1000},
     {name:"ポンパドール", group:"抜き物", kind:"fixed", value:1000},
     {name:"カフェパ等", group:"抜き物", kind:"fixed", value:1000},
@@ -321,17 +330,9 @@
     {name:"ドンペリ", group:"％バック", kind:"percent", value:10},
     {name:"ピンドン", group:"％バック", kind:"percent", value:10},
     {name:"アルマンド等", group:"％バック", kind:"percent", value:10},
-    {name:"予約バック（セット料金）", group:"％バック", kind:"percent", value:10},
-    {name:"テキーラ", group:"ショット", kind:"fixed", value:500},
-    {name:"コカボム", group:"ショット", kind:"fixed", value:500},
-    {name:"黒霧島", group:"焼酎", kind:"fixed", value:800},
-    {name:"壱岐", group:"焼酎", kind:"fixed", value:800},
-    {name:"白", group:"焼酎", kind:"fixed", value:800},
-    {name:"ウィスキー", group:"その他", kind:"fixed", value:1000},
-    {name:"キャストドリンク", group:"ドリンク", kind:"fixed", value:200, bonusEvery:11, bonusAmt:500},
-    {name:"ヘルプドリンク", group:"ドリンク", kind:"fixed", value:100},
-    {name:"予約の子ドリンク", group:"ドリンク", kind:"fixed", value:100}
+    {name:"予約バック（セット料金）", group:"％バック", kind:"percent", value:10}
   ];
+  var GROUP_ORDER_V1 = ["ドリンク","ショット","焼酎","その他","抜き物","％バック"];
 
   function load(){
     try {
@@ -349,7 +350,19 @@
     } catch(e){}
     if(state.drinks.length===0) state.drinks = DEFAULT_DRINKS.map(function(d){ var c=Object.assign({},d); c.id=uid(); return c; });
     state.workDate = todayYMD();
+    reorderGroupsOnce();
     migrateHistory();
+  }
+  /* one-time: arrange drink groups into the requested order (within-group order kept) */
+  function reorderGroupsOnce(){
+    if(state.groupOrderV1) return;
+    var groups=groupOrder();
+    var ordered=GROUP_ORDER_V1.filter(function(g){ return groups.indexOf(g)!==-1; });
+    groups.forEach(function(g){ if(ordered.indexOf(g)===-1) ordered.push(g); });
+    var out=[];
+    ordered.forEach(function(g){ state.drinks.forEach(function(d){ if((d.group||"その他")===g) out.push(d); }); });
+    state.drinks=out;
+    state.groupOrderV1=true;
   }
   function pad2(x){ return (x<10?"0":"")+x; }
   function todayYMD(){ var n=new Date(); return n.getFullYear()+"-"+pad2(n.getMonth()+1)+"-"+pad2(n.getDate()); }

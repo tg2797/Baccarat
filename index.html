@@ -58,6 +58,9 @@
   /* grouped list */
   .grouplabel { font-size:13px; color:rgba(235,235,245,0.55); margin:24px 8px 7px; font-weight:500; }
   .grouplabel.first { margin-top:2px; }
+  .glabel-row { display:flex; align-items:center; justify-content:space-between; margin:24px 6px 7px; }
+  .glabel-row.first { margin-top:2px; }
+  .glabel-row .gname { font-size:15px; color:#FFFFFF; font-weight:600; }
   .group { background:#1C1C1E; border-radius:16px; overflow:hidden; }
   .cell {
     position:relative; display:flex; align-items:center; justify-content:space-between;
@@ -496,7 +499,8 @@
     el("drinkSearchBar").style.display=drinkReorder?"none":"flex";
     var q=drinkReorder?"":(el("drinkSearch").value||"").trim().toLowerCase();
     var html="", first=true, any=false;
-    groupOrder().forEach(function(g){
+    var gOrder=groupOrder();
+    gOrder.forEach(function(g,gi){
       var arr=state.drinks.filter(function(d){
         if((d.group||"その他")!==g) return false;
         if(!q) return true;
@@ -504,7 +508,13 @@
       });
       if(arr.length===0) return;
       any=true;
-      html+='<div class="grouplabel'+(first?' first':'')+'">'+escapeHtml(g)+'</div><div class="group">'; first=false;
+      if(drinkReorder){
+        html+='<div class="glabel-row'+(first?' first':'')+'"><div class="gname">'+escapeHtml(g)+'</div>'
+          +'<div class="movebtns"><button class="movebtn gUp" data-gi="'+gi+'"'+(gi===0?' disabled':'')+'>↑</button><button class="movebtn gDn" data-gi="'+gi+'"'+(gi===gOrder.length-1?' disabled':'')+'>↓</button></div></div><div class="group">';
+      } else {
+        html+='<div class="grouplabel'+(first?' first':'')+'">'+escapeHtml(g)+'</div><div class="group">';
+      }
+      first=false;
       arr.forEach(function(d,i){
         var sub=d.kind==="percent"?(d.value+"% バック"):(yen(d.value)+" / 杯"+(d.bonusEvery>0&&d.bonusAmt>0?("　＋"+d.bonusEvery+"杯ごと"+yen(d.bonusAmt)):""));
         if(drinkReorder){
@@ -521,6 +531,8 @@
     if(drinkReorder){
       list.querySelectorAll(".dUp").forEach(function(b){ b.addEventListener("click",function(){ moveDrink(b.getAttribute("data-id"),-1); }); });
       list.querySelectorAll(".dDn").forEach(function(b){ b.addEventListener("click",function(){ moveDrink(b.getAttribute("data-id"),1); }); });
+      list.querySelectorAll(".gUp").forEach(function(b){ b.addEventListener("click",function(){ var go=groupOrder(); moveGroup(go[+b.getAttribute("data-gi")],-1); }); });
+      list.querySelectorAll(".gDn").forEach(function(b){ b.addEventListener("click",function(){ var go=groupOrder(); moveGroup(go[+b.getAttribute("data-gi")],1); }); });
     } else {
       list.querySelectorAll(".cell").forEach(function(r){ r.addEventListener("click", function(){ openDrinkEdit(r.getAttribute("data-id")); }); });
     }
@@ -533,6 +545,14 @@
     var a=idxs[pos], b=idxs[target];
     var tmp=state.drinks[a]; state.drinks[a]=state.drinks[b]; state.drinks[b]=tmp;
     save(); renderDrinks();
+  }
+  function moveGroup(name,dir){
+    if(name==null) return;
+    var order=groupOrder(); var i=order.indexOf(name); var j=i+dir;
+    if(i<0||j<0||j>=order.length) return;
+    var tmp=order[i]; order[i]=order[j]; order[j]=tmp;
+    var out=[]; order.forEach(function(g){ state.drinks.forEach(function(d){ if((d.group||"その他")===g) out.push(d); }); });
+    state.drinks=out; state.groupOrderV1=true; save(); renderDrinks();
   }
 
   /* render: history + monthly summary */
